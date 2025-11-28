@@ -391,7 +391,8 @@ def _conv_filter(state_dict, patch_size=16):
         out_dict[k] = v
     return out_dict
 
-def vit_small_patch16_224(pretrained=False, **kwargs):
+def vit_small_patch2_32(pretrained=False, **kwargs):
     model = VisionTransformer(
         patch_size=2, embed_dim=384, depth=12, num_heads=6, mlp_ratio=4, qkv_bias=True, **kwargs)
+
     return model
