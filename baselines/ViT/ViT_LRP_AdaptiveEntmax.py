@@ -52,7 +52,7 @@ class Mlp(nn.Module):
 
 
 class Attention(nn.Module):
-    def __init__(self, dim, num_heads=8, qkv_bias=False,attn_drop=0., proj_drop=0., alpha_init=1.5):
+    def __init__(self, dim, num_heads=8, qkv_bias=False,attn_drop=0., proj_drop=0., alpha_init=0.75):
         super().__init__()
         self.num_heads = num_heads
         head_dim = dim // num_heads
@@ -123,7 +123,7 @@ class Attention(nn.Module):
         dots = self.matmul1([q, k]) * self.scale
 
         # apply entmax with learnable α (clamped to valid range)
-        alphas = self.alpha.clamp(1.0, 2.0)
+        # alphas = self.alpha.clamp(1.0, 2.0)
         attn = torch.stack([
             self.adaptive_entmax(dots[:, h, :, :], alpha=alphas[h], dim=-1)
             for h in range(self.num_heads)
@@ -406,4 +406,5 @@ def _conv_filter(state_dict, patch_size=16):
 def vit_small_patch2_32(pretrained=False, **kwargs):
     model = VisionTransformer(
         patch_size=2, embed_dim=384, depth=12, num_heads=6, mlp_ratio=4, qkv_bias=True, **kwargs)
+
     return model
