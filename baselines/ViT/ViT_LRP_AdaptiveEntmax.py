@@ -123,7 +123,7 @@ class Attention(nn.Module):
         dots = self.matmul1([q, k]) * self.scale
 
         # apply entmax with learnable α (clamped to valid range)
-        # alphas = self.alpha.clamp(1.0, 2.0)
+        alphas = self.alpha
         attn = torch.stack([
             self.adaptive_entmax(dots[:, h, :, :], alpha=alphas[h], dim=-1)
             for h in range(self.num_heads)
@@ -408,3 +408,4 @@ def vit_small_patch2_32(pretrained=False, **kwargs):
         patch_size=2, embed_dim=384, depth=12, num_heads=6, mlp_ratio=4, qkv_bias=True, **kwargs)
 
     return model
+
